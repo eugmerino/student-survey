@@ -1,0 +1,29 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Proyecto Django</title>
+
+    <!-- Cargar Bootstrap -->
+    {% bootstrap_css %}
+
+    {% block extra_styles %}
+        
+    {% endblock %}
+</head>
+<body>
+
+    {% include "parts/navbar.html" %}
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% include "parts/footer.html" %}
+
+    <!-- Cargar JavaScript de Bootstrap -->
+    {% bootstrap_javascript %}
+</body>
+</html>

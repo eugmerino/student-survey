@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Evaluaciones pendientes</h1>
+    {% else %}
+        <h1>Bienvenido, invitado!</h1>
+    {% endif %}
+    
+    <br>
+
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar alumnos..." />
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>NIE</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="studentTableBody">
+            <!-- Aquí irían los datos dinámicos de los estudiantes -->
+            <tr>
+                <td>1</td>
+                <td>Juan Camilo</td>
+                <td>Pérez Soza</td>
+                <td>232334</td>
+                <td><button class="btn btn-primary">Evaluar</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Ana Marina</td>
+                <td>Gómez Constanza</td>
+                <td>2343242</td>
+                <td><button class="btn btn-primary">Evaluar</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Carlos Alberto</td>
+                <td>Sánchez Portillo</td>
+                <td>45645645</td>
+                <td><button class="btn btn-primary">Evaluar</button></td>
+            </tr>
+            <!-- Más filas pueden ser agregadas dinámicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            var searchTerm = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#studentTableBody tr');
+
+            rows.forEach(function(row) {
+                var cells = row.getElementsByTagName('td');
+                var found = false;
+
+                for (var i = 1; i < 4; i++) {
+                    if (cells[i].textContent.toLowerCase().includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                row.style.display = found ? '' : 'none';
+            });
+        });
+    </script>
+{% endblock %}
+
