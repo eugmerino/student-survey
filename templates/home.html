@@ -1,3 +1,4 @@
+<!-- home.html -->
 {% extends "base.html" %}
 
 {% block title %}Inicio{% endblock %}
@@ -11,44 +12,45 @@
     
     <br>
 
-    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar alumnos..." />
+    <input
+        type="text"
+        id="searchInput"
+        class="form-control mb-3 bg-body-tertiary"
+        placeholder="Buscar alumnos..."
+    />
 
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>NIE</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="studentTableBody">
-            <!-- Aquí irían los datos dinámicos de los estudiantes -->
-            <tr>
-                <td>1</td>
-                <td>Juan Camilo</td>
-                <td>Pérez Soza</td>
-                <td>232334</td>
-                <td><button class="btn btn-primary">Evaluar</button></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Ana Marina</td>
-                <td>Gómez Constanza</td>
-                <td>2343242</td>
-                <td><button class="btn btn-primary">Evaluar</button></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Carlos Alberto</td>
-                <td>Sánchez Portillo</td>
-                <td>45645645</td>
-                <td><button class="btn btn-primary">Evaluar</button></td>
-            </tr>
-            <!-- Más filas pueden ser agregadas dinámicamente -->
-        </tbody>
-    </table>
+    <div class="overflow-auto">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>NIE</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                {% if students %}
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td> 
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.last_name }}</td>
+                            <td>{{ student.NIE }}</td>
+                            <td><button class="btn btn-primary">Evaluar</button></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            No hay estudiantes asignados.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
