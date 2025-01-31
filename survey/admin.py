@@ -37,5 +37,5 @@ class CampaignAdmin(admin.ModelAdmin):
 
 @admin.register(Assignment)
 class AssignmentAdmin(admin.ModelAdmin):
-    list_filter = ('campaign', 'user', 'student')
+    list_filter = ('campaign', 'user', 'students')
     search_fields = ('campaign__name', 'user__username', 'student__name')

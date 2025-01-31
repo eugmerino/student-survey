@@ -100,12 +100,11 @@ class Assignment(models.Model):
         on_delete=models.CASCADE, 
         verbose_name="Maestro"
     )
-    student = models.ForeignKey(
+    students = models.ManyToManyField(
         Student, 
         related_name='assignments', 
-        on_delete=models.CASCADE, 
-        verbose_name="Estudiante"
+        verbose_name="Estudiantes"
     )
 
     def __str__(self):
-        return "{} - {}".format(self.user, self.student)
+        return "{} - {}".format(self.user, self.campaign)
