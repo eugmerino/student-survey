@@ -1,1 +1,4 @@
-django>=4.2,<5.0  # Última versión LTS de Django
+asgiref==3.8.1
+Django==4.2.18
+django-bootstrap5==24.3
+sqlparse==0.5.3
