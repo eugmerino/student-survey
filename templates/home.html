@@ -6,11 +6,11 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-        <h1 class="alert alert-success h3">Evaluaciones pendientes</h1>
+        <h1 class="alert alert-success h4">Evaluaciones pendientes</h1>
     {% else %}
         <h1>Bienvenido, invitado!</h1>
     {% endif %}
-    
+
     <input
         type="text"
         id="searchInput"
