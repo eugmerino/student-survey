@@ -8,13 +8,25 @@ from django.contrib.auth.decorators import login_required
 from survey.models import Assignment
 
 
-@login_required(login_url='login')  # Redirige al login si no está autenticado
+@login_required(login_url='login')
 def home_view(request):
-    user = request.user  # Obtiene el usuario autenticado
-    assignments = Assignment.objects.filter(user=user)  # Filtra asignaciones del usuario
-    students = set(student for assignment in assignments for student in assignment.students.all())  # Obtiene los estudiantes únicos
+    user = request.user  
+    assignments = Assignment.objects.filter(user=user).prefetch_related('students')  
 
-    return render(request, "home.html", {"students": students})
+    data = []
+    for assignment in assignments:
+        students_list = [
+            {"id": student.id, "name": f"{student.name} {student.last_name}", "NIE": student.NIE}
+            for student in assignment.students.all()
+        ]
+        data.append({
+            "id": assignment.id,
+            "campaign": assignment.campaign,
+            "user": assignment.user,
+            "students": students_list
+        })
+
+    return render(request, "home.html", {"assignments_data": data})
 
 
 def custom_login(request):

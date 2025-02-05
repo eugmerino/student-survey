@@ -4,14 +4,13 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
+
     {% if user.is_authenticated %}
-        <h1>Evaluaciones pendientes</h1>
+        <h1 class="alert alert-success h3">Evaluaciones pendientes</h1>
     {% else %}
         <h1>Bienvenido, invitado!</h1>
     {% endif %}
     
-    <br>
-
     <input
         type="text"
         id="searchInput"
@@ -25,29 +24,38 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Apellido</th>
                     <th>NIE</th>
+                    <th>Encuesta</th>
                     <th>Acciones</th>
                 </tr>
-            </thead>
-            <tbody id="studentTableBody">
-                {% if students %}
-                    {% for student in students %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td> 
-                            <td>{{ student.name }}</td>
-                            <td>{{ student.last_name }}</td>
-                            <td>{{ student.NIE }}</td>
-                            <td><button class="btn btn-primary">Evaluar</button></td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
+        </thead>
+        <tbody id="studentTableBody">
+        {% if assignments_data %}
+            {% for assignment in assignments_data %}
+                {% for student in assignment.students %}
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
-                            No hay estudiantes asignados.
+                        <td>{{ forloop.counter }}</td> 
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.NIE }}</td>
+                        <td>{{ assignment.campaign.survey.name }}</td>
+                        <td>
+                            <a
+                                href="{% url 'survey_detail' survey_id=assignment.campaign.survey_id student_id=student.id %}"
+                                class="btn btn-primary"
+                            >
+                                Evaluar
+                            </a>
                         </td>
                     </tr>
-                {% endif %}
+                {% endfor %}
+            {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No hay estudiantes asignados.
+                    </td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>
