@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Survey, ResponseGroup, Question, Option, Campaign, Assignment
+from .models import (
+    Survey,
+    ResponseGroup,
+    Question,
+    Option,
+    Campaign,
+    Assignment,
+    Response
+)
 
 
 class QuestionInline(admin.TabularInline):
@@ -39,3 +47,8 @@ class CampaignAdmin(admin.ModelAdmin):
 class AssignmentAdmin(admin.ModelAdmin):
     list_filter = ('campaign', 'user', 'students')
     search_fields = ('campaign__name', 'user__username', 'student__name')
+
+
+@admin.register(Response)
+class ResponseAdmin(admin.ModelAdmin):
+    search_fields=('student_id',)

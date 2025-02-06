@@ -17,6 +17,21 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-8 mb-3">
+        {% if completed %}
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title fs-5">
+                    <strong>¡La evaluación fue completada!</strong>
+                </p>
+                <p>
+                    Si deseas hacer alguna modificación debes ponerte en contacto con 
+                    el administrador.
+                </p>
+                <br>
+                <a href="{% url 'home' %}" class="btn btn-primary">Ir al listado</a>
+            </div>
+        </div>
+        {% else %}
         <div class="card">
             <div class="card-header">Preguntas:</div>
             <form method="post">
@@ -54,6 +69,7 @@
                 </ul>
             </form>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

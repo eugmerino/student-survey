@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from student.models import Student
+import json
 
 class Survey(models.Model):
     name = models.CharField(
@@ -108,3 +109,25 @@ class Assignment(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.user, self.campaign)
+    
+
+class Response(models.Model):
+    student = models.ForeignKey(
+        Student, 
+        on_delete=models.CASCADE, 
+        related_name="responses", 
+        verbose_name="Estudiante"
+    )
+    response = models.TextField(verbose_name="Respuestas")
+
+    def get_campaign_id(self):
+        """ Extrae el ID de la campaña desde el JSON almacenado en response """
+        try:
+            data = json.loads(self.response)  # Convertir el texto JSON en diccionario
+            return data.get("campaign", {}).get("id")  # Obtener el ID de la campaña
+        except json.JSONDecodeError:
+            return None  # En caso de error en el JSON
+
+    def __str__(self):
+        return f"Response by {self.student.name}"
+    

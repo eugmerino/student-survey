@@ -40,7 +40,7 @@
                         <td>{{ assignment.campaign.survey.name }}</td>
                         <td>
                             <a
-                                href="{% url 'survey_detail' survey_id=assignment.campaign.survey_id student_id=student.id %}"
+                                href="{% url 'survey_detail' campaign_id=assignment.campaign.id survey_id=assignment.campaign.survey_id student_id=student.id %}"
                                 class="btn btn-primary"
                             >
                                 Evaluar
