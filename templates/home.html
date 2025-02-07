@@ -1,12 +1,12 @@
 <!-- home.html -->
 {% extends "base.html" %}
 
-{% block title %}Inicio{% endblock %}
+{% block title %}Asiganaciones{% endblock %}
 
 {% block content %}
 
     {% if user.is_authenticated %}
-        <h1 class="alert alert-success h4">Evaluaciones pendientes</h1>
+        <h1 class="alert alert-success h4"><i class="bi bi-chevron-double-right"></i> Evaluaciones pendientes</h1>
     {% else %}
         <h1>Bienvenido, invitado!</h1>
     {% endif %}
@@ -42,7 +42,7 @@
                             href="{% url 'survey_detail' assignment_id=assignment.id %}"
                             class="btn btn-primary"
                         >
-                            Evaluar
+                            <i class="bi bi-clipboard-check"></i> Evaluar
                         </a>
                     </td>
                 </tr>
