@@ -45,10 +45,20 @@ class CampaignAdmin(admin.ModelAdmin):
 
 @admin.register(Assignment)
 class AssignmentAdmin(admin.ModelAdmin):
-    list_filter = ('campaign', 'user', 'students')
+    list_filter = ('campaign', 'user', 'is_completed')
     search_fields = ('campaign__name', 'user__username', 'student__name')
+    list_display = ('campaign', 'user', 'student', 'is_completed')
 
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
-    search_fields=('student_id',)
+    search_fields=('student__name',)
+    list_display=('student', 'campaign_name', 'survey_name')
+
+    def campaign_name(self, obj):
+        return obj.get_campaign_name()
+    campaign_name.short_description = "Campaña" 
+
+    def survey_name(self, obj):
+        return obj.get_survey_name()
+    survey_name.short_description = "Evaluación" 

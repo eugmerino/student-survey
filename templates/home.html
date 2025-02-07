@@ -30,24 +30,22 @@
                 </tr>
         </thead>
         <tbody id="studentTableBody">
-        {% if assignments_data %}
-            {% for assignment in assignments_data %}
-                {% for student in assignment.students %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td> 
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.NIE }}</td>
-                        <td>{{ assignment.campaign.survey.name }}</td>
-                        <td>
-                            <a
-                                href="{% url 'survey_detail' campaign_id=assignment.campaign.id survey_id=assignment.campaign.survey_id student_id=student.id %}"
-                                class="btn btn-primary"
-                            >
-                                Evaluar
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
+        {% if assignments %}
+            {% for assignment in assignments %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> 
+                    <td>{{ assignment.student.name }} {{ assignment.student.last_name }}</td>
+                    <td>{{ assignment.student.NIE }}</td>
+                    <td>{{ assignment.campaign.survey.name }}</td>
+                    <td>
+                        <a
+                            href="{% url 'survey_detail' assignment_id=assignment.id %}"
+                            class="btn btn-primary"
+                        >
+                            Evaluar
+                        </a>
+                    </td>
+                </tr>
             {% endfor %}
             {% else %}
                 <tr>

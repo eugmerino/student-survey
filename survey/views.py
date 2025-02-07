@@ -9,7 +9,8 @@ from .models import (
     Student,
     Option,
     Campaign,
-    Response
+    Response,
+    Assignment
 )
 
 
@@ -21,10 +22,12 @@ def json_datetime_handler(obj):
 
 
 @login_required(login_url='login')
-def survey_detail(request, campaign_id, survey_id, student_id):
+def survey_detail(request, assignment_id):
 
-    survey = get_object_or_404(Survey, id=survey_id)
-    student = get_object_or_404(Student, id=student_id)
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    campaign = get_object_or_404(Campaign, id=assignment.campaign.id)
+    survey = get_object_or_404(Survey, id=assignment.campaign.survey.id)
+    student = get_object_or_404(Student, id=assignment.student.id)
 
     questions = survey.questions.all()
 
@@ -37,7 +40,6 @@ def survey_detail(request, campaign_id, survey_id, student_id):
         })
 
     if request.method == "POST":
-        campaign = get_object_or_404(Campaign, id=campaign_id)
         responses = {}
         for question in questions:
             selected_option_id = request.POST.get(f"question_{question.id}")
@@ -56,7 +58,9 @@ def survey_detail(request, campaign_id, survey_id, student_id):
             response=json.dumps(data,default=json_datetime_handler, indent=2)
         )
         response_instance.save()
-        # 
+        assignment.is_completed = True
+        assignment.save()
+        # finaliza creación de respuesta
 
         return render(
             request,

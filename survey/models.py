@@ -101,14 +101,18 @@ class Assignment(models.Model):
         on_delete=models.CASCADE, 
         verbose_name="Maestro"
     )
-    students = models.ManyToManyField(
-        Student, 
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
         related_name='assignments', 
-        verbose_name="Estudiantes"
+        verbose_name="Estudiante"
+    )
+    is_completed = models.BooleanField(
+        default=False, verbose_name="Completa"
     )
 
     def __str__(self):
-        return "{} - {}".format(self.user, self.campaign)
+        return "{} - {}".format(self.user, self.student)
     
 
 class Response(models.Model):
@@ -126,8 +130,24 @@ class Response(models.Model):
             data = json.loads(self.response)  # Convertir el texto JSON en diccionario
             return data.get("campaign", {}).get("id")  # Obtener el ID de la campaña
         except json.JSONDecodeError:
-            return None  # En caso de error en el JSON
+            return None
+        
+    def get_campaign_name(self):
+        """ Extrae el name de la campaña desde el JSON almacenado en response """
+        try:
+            data = json.loads(self.response)  # Convertir el texto JSON en diccionario
+            return data.get("campaign", {}).get("name")  # Obtener el name de la campaña
+        except json.JSONDecodeError:
+            return None 
+        
+    def get_survey_name(self):
+        """ Extrae el name de la evaluación desde el JSON almacenado en response """
+        try:
+            data = json.loads(self.response)  # Convertir el texto JSON en diccionario
+            return data.get("survey", {}).get("name")  # Obtener el name de la evaluación
+        except json.JSONDecodeError:
+            return None 
 
     def __str__(self):
-        return f"Response by {self.student.name}"
+        return f"Respuestas para {self.student.name}"
     

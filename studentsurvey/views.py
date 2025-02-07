@@ -3,30 +3,31 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
+from survey.models import Response
 
 #models
-from survey.models import Assignment
+from survey.models import Assignment, Student
 
 
 @login_required(login_url='login')
 def home_view(request):
     user = request.user  
-    assignments = Assignment.objects.filter(user=user).prefetch_related('students')  
+    assignments = Assignment.objects.filter(user=user, is_completed=False).prefetch_related('student')  
 
     data = []
     for assignment in assignments:
-        students_list = [
-            {"id": student.id, "name": f"{student.name} {student.last_name}", "NIE": student.NIE}
-            for student in assignment.students.all()
-        ]
+        student_obj = Student.objects.get(id=assignment.student.id)
+
         data.append({
             "id": assignment.id,
             "campaign": assignment.campaign,
             "user": assignment.user,
-            "students": students_list
+            "student": student_obj
         })
 
-    return render(request, "home.html", {"assignments_data": data})
+    return render(request, "home.html", {"assignments": data})
 
 
 def custom_login(request):
