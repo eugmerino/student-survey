@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 import json
 import datetime
@@ -25,6 +25,12 @@ def json_datetime_handler(obj):
 def survey_detail(request, assignment_id):
 
     assignment = get_object_or_404(Assignment, id=assignment_id)
+
+    # Redirecciona a la página home cuando la asignación no corresponde al usuario
+    # Evita la navegación por medio de la url cambiando el id de la asiganción
+    if assignment.user != request.user or assignment.is_completed==True:
+        return redirect("home")
+
     campaign = get_object_or_404(Campaign, id=assignment.campaign.id)
     survey = get_object_or_404(Survey, id=assignment.campaign.survey.id)
     student = get_object_or_404(Student, id=assignment.student.id)
