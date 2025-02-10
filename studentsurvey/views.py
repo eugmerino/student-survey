@@ -10,7 +10,7 @@ from survey.models import Assignment, Student
 from configuration.models import Menu
 
 #forms
-from studentsurvey.form import UserUpdateForm
+from studentsurvey.forms import UserUpdateForm
 
 
 def get_user_group(user):
