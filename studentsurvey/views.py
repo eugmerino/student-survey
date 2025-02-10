@@ -5,16 +5,23 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from survey.models import Response
-
 #models
 from survey.models import Assignment, Student
+from configuration.models import Menu
 
+#forms
+from studentsurvey.form import UserUpdateForm
+
+
+def get_user_group(user):
+    user_group = user.groups.first()
+    menu = Menu.objects.filter(user_group=user_group).first()
+    return menu
 
 @login_required(login_url='login')
 def home_view(request):
     user = request.user  
-    assignments = Assignment.objects.filter(user=user, is_completed=False).prefetch_related('student')  
+    assignments = Assignment.objects.filter(user=user, is_completed=False).prefetch_related('student')
 
     data = []
     for assignment in assignments:
@@ -27,7 +34,7 @@ def home_view(request):
             "student": student_obj
         })
 
-    return render(request, "home.html", {"assignments": data})
+    return render(request, "home.html", {"assignments": data, "menu": get_user_group(user)})
 
 
 def custom_login(request):
@@ -57,3 +64,23 @@ def custom_login(request):
 def custom_logout(request):
     logout(request)
     return redirect('login') 
+
+
+@login_required(login_url='login')
+def update_profile_view(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tu perfil ha sido actualizado correctamente.")
+    else:
+        form = UserUpdateForm(instance=request.user)  # Pre-carga los datos del usuario
+
+    return render(
+        request,
+        'profile.html',
+        {
+            'form': form,
+            'menu': get_user_group(request.user)
+        }
+    )

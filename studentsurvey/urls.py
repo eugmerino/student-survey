@@ -10,4 +10,5 @@ urlpatterns = [
     path('login/', views.custom_login, name='login'),
     path('logout/', views.custom_logout, name='custom_logout'),
     path('survey/', include('survey.urls')),
+    path('profile/', views.update_profile_view, name='profile'),
 ]
