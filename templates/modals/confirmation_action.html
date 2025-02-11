@@ -4,15 +4,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Eliminación</h5>
+                <h5 class="modal-title" id="confirmDeleteLabel">{{ modal_title }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ¿Estás seguro de que deseas eliminarlo?
+                {{ modal_text }}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Eliminar</a>
+                <a href="#" id="confirmDeleteBtn" class="btn {{modal_button_class}}">{{ modal_button_text }}</a>
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
         let confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
         let confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 
-        document.querySelectorAll(".delete-btn").forEach(button => {
+        document.querySelectorAll(".modal-action-button").forEach(button => {
             button.addEventListener("click", function (event) {
                 event.preventDefault();
                 let studentName = this.dataset.name;

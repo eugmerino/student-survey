@@ -6,8 +6,6 @@
 
 {% include "parts/page_title.html" with page_title=survey.name %}
 
-{% include "parts/message.html" %}
-
 <div class="row">
     <div class="col-sm-12 col-md-4 mb-3">
         <div class="card position-sticky top-0">
@@ -22,6 +20,9 @@
         {% if completed %}
         <div class="card">
             <div class="card-body">
+
+                {% include "parts/message.html" %}
+
                 <p class="card-title fs-5">
                     <strong>¡La evaluación fue completada!</strong>
                 </p>
@@ -65,11 +66,11 @@
                     </li>
                     {% endfor %}
                     <li class="list-group-item">
-                        <button type="submit" class="btn btn-primary mb-2">
-                            <i class="bi bi-send"></i> Enviar respuestas
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-send"></i><span class="d-none d-lg-inline"> Enviar respuestas</span>
                         </button>
-                        <a href="{% url 'home' %}" class="btn btn-secondary mb-2">
-                            <i class="bi bi-arrow-left"></i> Volver atrás
+                        <a href="{% url 'home' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i><span class="d-none d-lg-inline"> Volver atrás</span>
                         </a>
                     </li>
                 </ul>

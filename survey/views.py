@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import json
 import datetime
 from django.forms.models import model_to_dict
+from django.contrib import messages
 
 from .models import (
     Survey,
@@ -12,6 +13,7 @@ from .models import (
     Response,
     Assignment
 )
+from studentsurvey.commons import get_user_group
 
 
 def json_datetime_handler(obj):
@@ -66,6 +68,7 @@ def survey_detail(request, assignment_id):
         response_instance.save()
         assignment.is_completed = True
         assignment.save()
+        messages.success(request, "Evaluación guardada correctamente.")
         # finaliza creación de respuesta
 
         return render(
@@ -75,6 +78,7 @@ def survey_detail(request, assignment_id):
                 "survey": survey,
                 "student": student,
                 "questions_with_options": questions_with_options,
+                "menu": get_user_group(request.user),
                 "completed": True
             }
         )
@@ -86,6 +90,7 @@ def survey_detail(request, assignment_id):
             "survey": survey,
             "student": student,
             "questions_with_options": questions_with_options,
+            "menu": get_user_group(request.user),
             "completed": False,
         }
     )

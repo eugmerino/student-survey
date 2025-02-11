@@ -51,9 +51,10 @@
                         >
                             <i class="bi bi-eye"></i><span class="d-none d-lg-inline"> Ver</span>
                         </a>
+                        <!-- modal-action-button -->
                         <a
                             href="{% url 'student_delete' pk=student.id %}"
-                            class="btn btn-danger delete-btn"
+                            class="btn btn-danger modal-action-button"
                         >
                             <i class="bi bi-trash"></i><span class="d-none d-lg-inline"> Eliminar</span>
                         </a>
@@ -74,7 +75,7 @@
     <!-- Paginación -->
     {% include "parts/paginator.html" %}
 
-    {% include "modals/confirmation_delete.html" %}
+    {% include "modals/confirmation_action.html" with modal_title='Confirmar eliminación' modal_text='¿Estás seguro de que deseas eliminarlo?' modal_button_class="btn-danger" modal_button_text="Eliminar" %}
 
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
