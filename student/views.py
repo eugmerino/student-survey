@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib import messages
 
 #models
@@ -51,3 +51,18 @@ class StudentUpdateView(UserPassesTestMixin, LoginRequiredMixin, ModuleContextMi
         self.object = form.save()
         messages.success(self.request, "Los cambios se han guardado correctamente.")
         return redirect(self.request.path)
+
+
+@login_required(login_url='login')
+def student_delete_view(request, pk):
+
+    if not request.user.groups.filter(name="admin").exists():
+        messages.error(request, "No tienes permiso para acceder a esta página.")
+        return redirect('home')
+    
+    student = get_object_or_404(Student, pk=pk)
+    student_name = f"{student.name} {student.last_name}"
+    # student.delete()
+    messages.success(request, f'Estudiante {student_name} ha sido eliminado.')
+    
+    return redirect('student_list')
