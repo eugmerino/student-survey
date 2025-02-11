@@ -5,20 +5,9 @@
 
 {% block content %}
 
-    {% if user.is_authenticated %}
-        <h1 class="alert alert-primary h4"><i class="bi bi-chevron-double-right"></i> Estudiantes</h1>
-    {% else %}
-        <h1>Bienvenido, invitado!</h1>
-    {% endif %}
+    {% include "parts/page_title.html" with page_title="Estudiantes" %}
 
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
+    {% include "parts/message.html" %}
 
     <div class="d-flex gap-3 mb-3">
         <input

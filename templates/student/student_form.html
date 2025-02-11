@@ -5,11 +5,7 @@
 
 {% block content %}
 
-    {% if user.is_authenticated %}
-        <h1 class="alert alert-primary h4"><i class="bi bi-chevron-double-right"></i> Información del Estudiantes</h1>
-    {% else %}
-        <h1>Bienvenido, invitado!</h1>
-    {% endif %}
+    {% include "parts/page_title.html" with page_title=" Información del Estudiante" %}
 
     <div class="row">
         <div class="col-sm-12 col-md-4 mb-3">
@@ -22,14 +18,9 @@
         <div class="col-sm-12 col-md-8 mb-3">
             <div class="card">
                 <div class="card-body">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
+
+                    {% include "parts/message.html" %}
+
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
