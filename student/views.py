@@ -1,36 +1,53 @@
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.contrib import messages
 
 #models
 from .models import Student
 #funcions
-from studentsurvey.commons import get_user_group
+from studentsurvey.commons import ModuleContextMixin
+# Forms
+from .forms import StudentForm
 
 
-@login_required(login_url='login')
-def person_list(request):
-    # Verificar si el usuario pertenece al grupo "admin"
-    if not request.user.groups.filter(name="admin").exists():
-        messages.error(request, "No tienes permiso para acceder a esta página.")
-        return redirect('home')
+class StudentListView(LoginRequiredMixin, UserPassesTestMixin, ModuleContextMixin, ListView):
+    model = Student
+    template_name = "student/student_list.html"
+    context_object_name = "data"
+    paginate_by = 10
+    login_url = reverse_lazy("login")
+
+    def test_func(self):
+        """Verifica si el usuario pertenece al grupo 'admin'."""
+        return self.request.user.groups.filter(name="admin").exists()
+
+class StudentCreateView(UserPassesTestMixin, LoginRequiredMixin, ModuleContextMixin, CreateView):
+    model = Student
+    form_class = StudentForm
+    template_name = "student/student_form.html"
+    success_url = reverse_lazy("student_list")
+    login_url = reverse_lazy("login")
+
+    def test_func(self):
+        """Verifica si el usuario pertenece al grupo 'admin'."""
+        return self.request.user.groups.filter(name="admin").exists()
+
+
+class StudentUpdateView(UserPassesTestMixin, LoginRequiredMixin, ModuleContextMixin, UpdateView):
+    model = Student
+    form_class = StudentForm
+    template_name = "student/student_form.html"
+    login_url = reverse_lazy("login")
+
+    def test_func(self):
+        """Verifica si el usuario pertenece al grupo 'admin'."""
+        return self.request.user.groups.filter(name="admin").exists()
     
-    estudents = Student.objects.all().order_by('name') 
-    paginator = Paginator(estudents, 10)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'person/person_list.html', {
-        'page_obj': page_obj,
-        'menu': get_user_group(request.user)
-    })
-
-
-@login_required(login_url='login')
-def person_update(request, person_id):
-    print(person_id)
-    return render(request, 'person/person_new.html', {
-        'menu': get_user_group(request.user)
-    })
+    def form_valid(self, form):
+        """Después de guardar, redirige a la misma página de edición."""
+        self.object = form.save()
+        messages.success(self.request, "Los cambios se han guardado correctamente.")
+        return redirect(self.request.path)

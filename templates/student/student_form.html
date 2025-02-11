@@ -1,0 +1,51 @@
+<!-- person_new.html -->
+{% extends "base.html" %}
+
+{% block title %}Estudiantes{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <h1 class="alert alert-primary h4"><i class="bi bi-chevron-double-right"></i> Información del Estudiantes</h1>
+    {% else %}
+        <h1>Bienvenido, invitado!</h1>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 mb-3">
+            <div class="card position-sticky top-0">
+                <div class="card-body">
+                    <p>Actualiza tu información personal.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-8 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-save"></i>
+                            <span class="d-none d-lg-inline"> Guardar</span>
+                        </button>
+                        <a href="{% url 'student_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            <span class="d-none d-lg-inline"> Volver atrás</span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
