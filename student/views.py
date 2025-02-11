@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
 #models
@@ -17,7 +17,7 @@ class StudentListView(LoginRequiredMixin, UserPassesTestMixin, ModuleContextMixi
     model = Student
     template_name = "student/student_list.html"
     context_object_name = "data"
-    paginate_by = 10
+    paginate_by = 8
     login_url = reverse_lazy("login")
 
     def test_func(self):
