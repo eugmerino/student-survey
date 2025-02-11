@@ -62,7 +62,7 @@ def student_delete_view(request, pk):
     
     student = get_object_or_404(Student, pk=pk)
     student_name = f"{student.name} {student.last_name}"
-    # student.delete()
+    student.delete()
     messages.success(request, f'Estudiante {student_name} ha sido eliminado.')
     
     return redirect('student_list')
